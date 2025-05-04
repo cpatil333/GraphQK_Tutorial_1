@@ -1,0 +1,57 @@
+...Get all users list
+query getAllUsers {
+  users {
+    id
+    firstName
+    email
+  }
+}
+
+---Get All Quotes
+query getAllQuotes {
+  quotes {
+    name
+    by
+  }
+}
+
+--- Get user by id
+query getUsersById {
+  userById(id:"13131") {
+    id
+    firstName
+    email
+  }
+}
+
+-- Get All users with quotes
+# Write your query or mutation here
+query getAllUsersWithQuotes {
+  users {
+    id
+    firstName
+    email
+    quotes {
+      name
+      by
+    }
+  }
+}
+
+--Get one Quotes by byquery getQuotesByby {
+  quotesByby(by:"13132") {
+    name
+    by
+  }
+}
+
+-----Get one/single by Quotes id
+# Write your query or mutation here
+query getQuotesByby($userid:ID!) {
+  quotesByby(by:$userid) {
+    name
+    by
+  }
+}
+
+
