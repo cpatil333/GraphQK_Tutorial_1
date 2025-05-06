@@ -1,7 +1,9 @@
+--mongodb+srv://patilallied:5uMA94309QQgI7oI@cluster0.kfu4dlk.mongodb.net/
+
 ...Get all users list
 query getAllUsers {
   users {
-    id
+    _id
     firstName
     email
   }
@@ -11,14 +13,17 @@ query getAllUsers {
 query getAllQuotes {
   quotes {
     name
-    by
+    by {
+      _id
+      firstName
+    }
   }
 }
 
---- Get user by id
-query getUsersById {
-  userById(id:"13131") {
-    id
+--- Get user by _id
+query getUsersBy_id {
+  userBy_id(_id:"13131") {
+    _id
     firstName
     email
   }
@@ -26,9 +31,9 @@ query getUsersById {
 
 -- Get All users with quotes
 # Write your query or mutation here
-query getAllUsersWithQuotes {
+query getAllUsersQuotes {
   users {
-    id
+    _id
     firstName
     email
     quotes {
@@ -45,13 +50,80 @@ query getAllUsersWithQuotes {
   }
 }
 
------Get one/single by Quotes id
+-----Get one/single by Quotes _id
 # Write your query or mutation here
-query getQuotesByby($userid:ID!) {
+query getQuotesByby($userid:_id!) {
   quotesByby(by:$userid) {
     name
     by
   }
 }
 
+-----Create new user
+mutation createUser($newUser: UserInput!) {
+ user: singupUser(newUser: $newUser) {
+    _id
+    firstName
+    lastName`
+    email
+  }
+}
 
+-----siginin
+
+mutation singinUser($userSignin: UserSigninInput!) {
+ user: singinUser(userSignin: $userSignin) {
+   token
+  }
+}
+
+{
+  "userSignin": {
+    "email" : "chand@gmail.com",
+    "password" :"12345"
+  }
+}
+
+...Create Quotes
+mutation createQuote {
+  quote : createQuote(name: "I am another nice quote")
+}
+
+--- in the header
+{
+  "authorization" :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCyJ1c2VySWQiOiI2ODE3NDQ3YjE4NWVmMjhlYmU1YWRkZWQiLCJpYXQiOjE3NDY0MJ9.ejYxOTZ9.LxIdUpfMAZDujajxPeESN7eb1S4QTTQe8y9ter-4HEk"
+}
+
+---uddate exist user
+mutation UpdateExistUser($userUpdate: ExistUserInput!) {
+  user: updateUser(userUpdate: $userUpdate) {
+    _id
+    firstName
+    lastName
+    email
+  }
+}
+
+{
+  "userUpdate": {
+    "_id": "681866ea118955cd9094c83a",
+    "firstName": "mohan rao",
+    "lastName": "rawle",
+    "email": "mohanrao.rawle@gmail.com",
+    "password": "12345"
+  }
+}
+
+----deleted user
+mutation deleteExistUser($_id:ID!) {
+  user: deleteUser(_id:$_id) {
+    _id
+    firstName
+    lastName
+    email
+  }
+}
+
+{
+  "_id": "68187caaea654f394a7fba8e"
+}
