@@ -6,6 +6,7 @@ const typeDefs = gql`
     userById(_id: ID!): User
     quotes: [QuoteWithName]
     quotesByby(by: ID!): [Quote]
+    myProfile: User
   }
   type User {
     _id: ID!

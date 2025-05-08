@@ -1,8 +1,13 @@
+import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { SIGNUP_USER } from "../gqloptions/mutations";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [signupUser, { loading, error, data }] = useMutation(SIGNUP_USER);
 
+  if (loading) return <h1>Loading....</h1>;
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -12,12 +17,22 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    signupUser({
+      variables: {
+        newUser: formData,
+      },
+    });
   };
 
   return (
     <div className="container my-container">
-      <h5>SignUp!!</h5>
+      {error && <div className="red card-panel">{error.message}</div>}
+      {data && data.user && (
+        <div className="green card-panel">
+          {data.user.firstName} is SignedUp. You can login now.
+        </div>
+      )}
+      <h5>SignUp!</h5>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -47,6 +62,9 @@ export default function SignUp() {
           required
           onChange={handleChange}
         />
+        <Link to="/login">
+          <p>Already have an account </p>
+        </Link>
         <button type="submit" className="btn #673ab7 deep-purple">
           Submit
         </button>

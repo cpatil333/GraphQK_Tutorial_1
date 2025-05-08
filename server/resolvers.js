@@ -6,7 +6,6 @@ import Quote from "./models/Quote.js";
 import bycrupt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "./config.js";
-import { existsSync } from "fs";
 
 const resolvers = {
   Query: {
@@ -14,6 +13,13 @@ const resolvers = {
     userById: async (_, { _id }) => await User.findOne({ _id }),
     quotesByby: async (_, { by }) => await Quote.find({ by }),
     quotes: async () => await Quote.find({}).populate("by", "_id, firstName"),
+    //My profile
+    myProfile: async (_, { arg }, { userId }) => {
+      if (!userId) {
+        throw new Error("You must be logged");
+      }
+      return await User.findOne({ _id: userId });
+    },
   },
   User: {
     quotes: async (ur) => await Quote.find({ by: ur._id }), //quotes.filter((quote) => quote.by == ur._id),
@@ -102,7 +108,7 @@ const resolvers = {
       if (!deletedUser) {
         throw new Error("User not found or already deleted.");
       }
-      
+
       return deletedUser;
     },
   },
